@@ -18,13 +18,14 @@ public class GUI extends JFrame {
 
     private JPanel jugador;
     private JPanel oponente;
+    private JButton empezar;
 
 
     public GUI() {
         Container contentPane = this.getContentPane();
-        contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 50,20));
+        contentPane.setLayout(new FlowLayout(FlowLayout.CENTER, 50,65));
         contentPane.setBounds(0, 0, 20, 20);
-        this.setSize(new Dimension(800,400));
+        this.setSize(new Dimension(780,400));
         //this.setBounds(0, 0, 850, 450);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -35,11 +36,15 @@ public class GUI extends JFrame {
 
     private void inicialize() {
 
+        GridBagConstraints constraints = new GridBagConstraints();
         this.jugador = new JPanel();
         this.jugador.setPreferredSize(new Dimension(200,200));
         this.jugador.setBounds(0, 0, 20, 20);
         this.jugador.setBackground(Color.red);
         this.jugador.setLayout(new FlowLayout(FlowLayout.CENTER, 0,0));
+        empezar = new JButton("Empezar");
+        empezar.setLayout(new FlowLayout(FlowLayout.CENTER));
+        add(empezar);
         JButton[][]  fichasJugador = new JButton[10][10];
 
         for(int i = 0; i<10 ; i++) {
@@ -64,19 +69,22 @@ public class GUI extends JFrame {
         this.oponente.setPreferredSize(new Dimension(200,200));
         this.oponente.setBounds(0, 0, 20, 20);
         this.oponente.setBackground(Color.ORANGE);
-        this.oponente.setLayout(new FlowLayout(FlowLayout.LEFT, 0,0));
-        JPanel[][]  fichasOponente = {};
+        this.oponente.setLayout(new FlowLayout(FlowLayout.CENTER, 0,0));
+        String[]  fichasOponente = {"a","b","c","d","e","f","g","h","i","j"};
         for(int i = 0; i<10 ; i++) {
-            for(int j = 0; j<10 ; j++) {
+            for(int j = 1; j<=10 ; j++) {
                 JButton ficha = new JButton();
                 ficha.setPreferredSize(new Dimension(20,20));
                 ficha.setBounds(0, 0, 10, 10);
                 ficha.setBackground(new Color(75,155,214));
                 ficha.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-                fichasOponentes[i][j] = ficha;
+                ficha.setText(fichasOponente[i] + j);
+                ficha.setForeground(new Color(75,155,214));
+                fichasOponentes[i][j-1] = ficha;
+                
                 ficha.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(null,"a");
+                        JOptionPane.showMessageDialog(null,ficha.getText());
                     }
                 });
                 this.oponente.add(ficha);
