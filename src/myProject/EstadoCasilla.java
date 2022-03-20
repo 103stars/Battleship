@@ -1,3 +1,4 @@
+package myProject;
 
 public enum EstadoCasilla {
 	VACIA,
