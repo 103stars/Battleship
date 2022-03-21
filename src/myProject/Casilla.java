@@ -42,8 +42,9 @@ public class Casilla {
 			this.casilla.setEnabled(false);
 		} else if(this.estado.equals(EstadoCasilla.VACIA)) {
 			this.estado = EstadoCasilla.FALLO;
-			this.casilla.setBackground(Color.pink);
+			this.casilla.setBackground(Color.lightGray);
 		}
+		this.casilla.setEnabled(false);
 	}
 	
 	
