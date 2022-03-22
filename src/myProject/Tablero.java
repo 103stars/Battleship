@@ -5,6 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+
+/**
+ * This class is used to create the main logic behind the game
+ * @author Alejandro Lasso
+ * @version v.1.0.0 date:21/03/2022
+ */
 public class Tablero {
 
 	private List<Casilla> casillas;
@@ -18,6 +24,16 @@ public class Tablero {
 	private int hundidos;
 
 
+	boolean cambiarColor = false;
+
+	public void setCambiarColor(boolean cambiarColor) {
+		this.cambiarColor = cambiarColor;
+	}
+
+
+	/**
+	 * Arraylists are started
+	 */
 	public Tablero() {
 		this.casillas = new ArrayList<>();
 		this.portaAviones = new ArrayList<>();
@@ -25,38 +41,20 @@ public class Tablero {
 		this.destructores = new ArrayList<>();
 		this.fragatas = new ArrayList<>();
 		this.habilitado = true;
-
-
-
 	}
 
-	public int getHundidos() {
-		return hundidos;
-	}
 
-	public List<Casilla> getCasillas() {
-		return casillas;
-	}
 
-	public void setCasillas(List<Casilla> casillas) {
-		this.casillas = casillas;
-	}
-
-	public boolean isHabilitado() {
-		return habilitado;
-	}
-
-	public void setHabilitado(boolean habilitado) {
-		this.habilitado = habilitado;
-	}
-
+	/**
+	 * Dictates how many boats of each type are going to be placed in the board
+	 */
 	public void crearPartida() {
-		if(habilitado) {
+		if(habilitado && cambiarColor==false) {
 			this.fragatas = crearEmbarcaciones(1, 4 , new Color(75,155,214));
 			this.destructores = crearEmbarcaciones(2, 3, new Color(75,155,214));
 			this.submarinos = crearEmbarcaciones(3, 2, new Color(75,155,214));
 			this.portaAviones = crearEmbarcaciones(4, 1, new Color(75,155,214));
-		}else {
+		}else{
 			this.fragatas = crearEmbarcaciones(1, 4 , Color.MAGENTA);
 			this.destructores = crearEmbarcaciones(2, 3, Color.BLUE);
 			this.submarinos = crearEmbarcaciones(3, 2, Color.GRAY);
@@ -64,12 +62,12 @@ public class Tablero {
 		}
 	}
 
-	public void validarTablero() {
-		validadBarcos(this.fragatas);
-		validadBarcos(this.destructores);
-		validadBarcos(this.submarinos);
-		validadBarcos(this.portaAviones);
-	}
+
+
+	/**
+	 * Checks if a boat is destroyed and makes it red
+	 * @param barcos
+	 */
 	public void validadBarcos(List<Barco> barcos) {
 		barcos.forEach(barco ->{
 			indexBarco = 0;
@@ -92,10 +90,33 @@ public class Tablero {
 
 	}
 
+	/**
+	 *Uses the above method for every type of boat
+	 *
+	 */
+	public void validarTablero() {
+		validadBarcos(this.fragatas);
+		validadBarcos(this.destructores);
+		validadBarcos(this.submarinos);
+		validadBarcos(this.portaAviones);
+	}
+
+
+	/**
+	 *
+	 * Displays the sum of destroyed boats
+	 * @return
+	 */
 	public int verDestruidos() {
 		return calcularDestruidos(destructores)+ calcularDestruidos(fragatas) + calcularDestruidos(portaAviones) + calcularDestruidos(submarinos);
 	}
 
+
+	/**
+	 * Counts how many boats are destroyed
+	 * @param barcos
+	 * @return
+	 */
 	public int calcularDestruidos(List<Barco> barcos) {
 		hundidos = 0;
 		barcos.forEach(barco ->{
@@ -114,6 +135,16 @@ public class Tablero {
 		});
 		return hundidos;
 	}
+
+	/**
+	 * Most important method in the class, it creates all the boats checks each position to see
+	 * if a boat can be placed in said position, could be either vertically or horizontally
+	 *
+	 * @param tipo Type of boat like destructor or submarine
+	 * @param cantidadBarcos amount of boats placed in the board
+	 * @param color color of each type of boat placed in player's board
+	 * @return
+	 */
 	private List<Barco> crearEmbarcaciones(int tipo, int cantidadBarcos, Color color) {
 		String[] puntos = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" };
 		int x = 0;
@@ -226,7 +257,23 @@ public class Tablero {
 			}
 		}
 		return barcos;
+	}
 
+	/**
+	 * Setters and getters.
+	 */
+
+	public List<Casilla> getCasillas() {
+		return casillas;
+	}
+	public void setHabilitado(boolean habilitado) {
+		this.habilitado = habilitado;
+	}
+	public void setCasillas(List<Casilla> casillas) {
+		this.casillas = casillas;
+	}
+	public boolean isHabilitado() {
+		return habilitado;
 	}
 
 }

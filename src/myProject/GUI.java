@@ -13,16 +13,23 @@ import javax.swing.*;
 public class GUI extends JFrame {
 
 	/**
-	* 
-	*/
+	 * This class is used to create the main frame of the program
+	 * @author Alejandro Lasso
+	 * @version v.1.0.0 date:21/03/2022
+	 */
 	private static final long serialVersionUID = 6411499808530678723L;
 
 	private JPanel jugador;
 	private JPanel oponente;
 	private JButton empezar, instrucciones;
+
 	private Tablero tJugador;
 	private Tablero tOponente;
 	private JTextArea informacion;
+
+	/**
+	 * Constructor of GUI class
+	 */
 
 	public GUI() {
 		Container contentPane = this.getContentPane();
@@ -36,7 +43,14 @@ public class GUI extends JFrame {
 		inicialize();
 		this.setVisible(true);
 		this.setLayout(null);
+		this.setLocationRelativeTo(null);
+
 	}
+
+	/**
+	 * This method is used to set up the default JComponent Configuration,
+	 * create Listener and control Objects used for the GUI class
+	 */
 	
 	private void inicialize() {
 		this.tJugador = new Tablero();
@@ -70,6 +84,7 @@ public class GUI extends JFrame {
 				ficha.setBackground(casilla.getColor());
 				ficha.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				ficha.setEnabled(this.tJugador.isHabilitado());
+				ficha.setForeground(Color.red);
 				ficha.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -93,6 +108,11 @@ public class GUI extends JFrame {
 		this.oponente.setBorder(BorderFactory.createTitledBorder("Flota oponente"));
 		List<Casilla> casillaOponente= new ArrayList<Casilla>();
 
+		/**
+		 *
+		 * all of the 100 buttons are created in this part, their properties are also assigned
+		 */
+
 		for(int i = 0; i<10 ; i++) {
 			for(int j = 1; j<=10 ; j++) {
 				Casilla casilla = new Casilla();
@@ -105,6 +125,7 @@ public class GUI extends JFrame {
 				ficha.setBackground(casilla.getColor());
 				ficha.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				ficha.setEnabled(false);
+				ficha.setForeground(Color.red);
 				ficha.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -122,7 +143,7 @@ public class GUI extends JFrame {
 								informacion.setText("Barcos que has destruído: " + tOponente.verDestruidos()+  "\n"+""+"\n"+
 										"Barcos que te han destruído: " +tJugador.verDestruidos());
 								if(tJugador.verDestruidos()==10){
-									JOptionPane.showMessageDialog(null, "perdiste");
+									JOptionPane.showMessageDialog(null, "Has perdido, han destruído todos tus barcos");
 									tOponente.getCasillas().forEach(cas ->{
 										cas.getCasilla().setEnabled(false);
 									});
@@ -130,7 +151,7 @@ public class GUI extends JFrame {
 										cas.getCasilla().setEnabled(false);
 									});
 								}if(tOponente.verDestruidos()==10){
-									JOptionPane.showMessageDialog(null, "ganaste");
+									JOptionPane.showMessageDialog(null, "Has ganado! Destruiste todos los barcos de tu oponente");
 									tOponente.getCasillas().forEach(cas ->{
 										cas.getCasilla().setEnabled(false);
 									});
@@ -157,12 +178,24 @@ public class GUI extends JFrame {
 			this.oponente.add(casilla.getCasilla());
 		});
 
+		/**
+		 *
+		 * More jComponents are added
+		 */
+
 		add(this.oponente);
 		empezar = new JButton("Empezar");
 		empezar.setBounds(100,0,100,0);
 		empezar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int i = JOptionPane.showConfirmDialog(null, "Deseas mostrar la flota oponente?","Cuadro de dialogo", JOptionPane.YES_NO_OPTION);
+				if (i== JOptionPane.YES_OPTION){
+					tOponente.setCambiarColor(true);
+				}else{
+					tOponente.setCambiarColor(false);
+				}
+
 				tJugador.crearPartida();
 				tOponente.crearPartida();
 				empezar.setEnabled(false);
@@ -195,7 +228,10 @@ public class GUI extends JFrame {
 						"Verde -> Portaaviones , ocupan 4 casillas"+"\n"+
 						"Gris -> Submarinos , ocupan 3 casillas"+"\n"+
 						"Azul -> Destructores, ocupan 2 casillas"+"\n"+
-						"Magenta -> Fragatas, ocupan 1 casillas"+"\n");
+						"Magenta -> Fragatas, ocupan 1 casilla"+"\n"+
+						"Si la casilla que selecciones toma el color gris claro quiere decir que fallaste"+"\n"+
+						"Si se torna de color amarillo significa que le diste a la parte de un barco"+"\n"+
+						"Cuando se torna roja quiere decir que un barco entero ha sido destruído");
 
 			}
 		});
