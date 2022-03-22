@@ -14,7 +14,9 @@ public class Tablero {
 	private List<Barco> destructores;
 	private List<Barco> fragatas;
 	boolean esDestruido = true;
-	int indexBarco = 0;
+	private int indexBarco;
+	private int hundidos;
+
 
 	public Tablero() {
 		this.casillas = new ArrayList<>();
@@ -23,6 +25,13 @@ public class Tablero {
 		this.destructores = new ArrayList<>();
 		this.fragatas = new ArrayList<>();
 		this.habilitado = true;
+
+
+
+	}
+
+	public int getHundidos() {
+		return hundidos;
 	}
 
 	public List<Casilla> getCasillas() {
@@ -48,7 +57,7 @@ public class Tablero {
 			this.submarinos = crearEmbarcaciones(3, 2, new Color(75,155,214));
 			this.portaAviones = crearEmbarcaciones(4, 1, new Color(75,155,214));
 		}else {
-			this.fragatas = crearEmbarcaciones(1, 4 , Color.BLACK);
+			this.fragatas = crearEmbarcaciones(1, 4 , Color.MAGENTA);
 			this.destructores = crearEmbarcaciones(2, 3, Color.BLUE);
 			this.submarinos = crearEmbarcaciones(3, 2, Color.GRAY);
 			this.portaAviones = crearEmbarcaciones(4, 1, Color.green);
@@ -83,6 +92,28 @@ public class Tablero {
 
 	}
 
+	public int verDestruidos() {
+		return calcularDestruidos(destructores)+ calcularDestruidos(fragatas) + calcularDestruidos(portaAviones) + calcularDestruidos(submarinos);
+	}
+
+	public int calcularDestruidos(List<Barco> barcos) {
+		hundidos = 0;
+		barcos.forEach(barco ->{
+			indexBarco = 0;
+			esDestruido = true;
+			barco.getEmbarcacion().forEach(cas ->{
+				indexBarco++;
+				if(!(cas.getEstado().equals(EstadoCasilla.HUNDIDO))) {
+					esDestruido = false;
+				}
+				if(indexBarco == barco.getEmbarcacion().size() && esDestruido ) {
+					hundidos++;
+				}
+			});
+
+		});
+		return hundidos;
+	}
 	private List<Barco> crearEmbarcaciones(int tipo, int cantidadBarcos, Color color) {
 		String[] puntos = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j" };
 		int x = 0;
